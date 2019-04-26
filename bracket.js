@@ -21,6 +21,8 @@ for (let i = 1; i <= 10; i++) {
 
 let createBracketButton = document.getElementById("getBracket");
 
+updateSpotifyID();
+
 function updateSize(sizeValue) {
     size = sizeValue
 }
@@ -32,17 +34,22 @@ function updateSeeded(seededValue) {
 function updateSpotifyID() {
     let URI = uriInput.value;
     let validURI = false;
-    if (/spotify:artist:\w+/.test(URI)) {
+    if (/spotify:artist:\w+/.test(URI) || /https?:\/\/open.spotify.com\/artist\/\w+/.test(URI)) {
         validURI = true;
         competitorType = "album";
     }
-    if (/spotify:user:\w+:playlist:\w+/.test(URI)) {
+    if (/spotify:user:\w+:playlist:\w+/.test(URI) || /https?:\/\/open.spotify.com\/user\/\w+\/playlist\/\w+/.test(URI)) {
         validURI = true;
         competitorType = "track";
     }
     if (validURI) {
-        let splitURI = URI.split(":");
-        spotifyID = splitURI[splitURI.length - 1];
+        if (URI.startsWith("http")) {
+            let splitURI = URI.split("/");
+            spotifyID = splitURI[splitURI.length - 1].split("?")[0];
+        } else {
+            let splitURI = URI.split(":");
+            spotifyID = splitURI[splitURI.length - 1];
+        }
         createBracketButton.disabled = false;
     } else {
         spotifyID = null;
