@@ -11,10 +11,15 @@ uriInput.addEventListener("input", updateSpotifyID);
 uriInput.addEventListener("propertychange", updateSpotifyID);
 
 let sizeInput = document.getElementById("size");
+let node = document.createElement("option");
+let text = document.createTextNode("Auto");
+node.setAttribute("value", "auto");
+node.appendChild(text);
+sizeInput.appendChild(node);
 for (let i = 1; i <= 10; i++) {
     let node = document.createElement("option");
     let text = document.createTextNode(Math.pow(2, i).toString());
-    node.setAttribute("size", Math.pow(2, i).toString());
+    node.setAttribute("value", Math.pow(2, i).toString());
     node.appendChild(text);
     sizeInput.appendChild(node);
 }
