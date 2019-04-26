@@ -1,4 +1,4 @@
-let competitorType = "album";
+let competitorType = null;
 let size = 2;
 let seeded = true;
 let spotifyID = null;
@@ -21,11 +21,6 @@ for (let i = 1; i <= 10; i++) {
 
 let createBracketButton = document.getElementById("getBracket");
 
-function updateCompetitorType(competitorValue) {
-    competitorType = competitorValue;
-    updateSpotifyID();
-}
-
 function updateSize(sizeValue) {
     size = sizeValue
 }
@@ -37,10 +32,13 @@ function updateSeeded(seededValue) {
 function updateSpotifyID() {
     let URI = uriInput.value;
     let validURI = false;
-    if (competitorType === "album") {
-        validURI = /spotify:artist:\w+/.test(URI);
-    } else {
-        validURI = /spotify:user:\w+:playlist:\w+/.test(URI);
+    if (/spotify:artist:\w+/.test(URI)) {
+        validURI = true;
+        competitorType = "album";
+    }
+    if (/spotify:user:\w+:playlist:\w+/.test(URI)) {
+        validURI = true;
+        competitorType = "track";
     }
     if (validURI) {
         let splitURI = URI.split(":");
@@ -99,7 +97,7 @@ function updateBracketData(winnerElement) {
 function getBracketData() {
     let xhttp = new XMLHttpRequest();
 
-    xhttp.open("GET", "http://174.16.217.76:8000/bracket/" + competitorType + "/auto?from=" + spotifyID + "&size=" + size + "&seeded=" + seeded)
+    xhttp.open("GET", "http://localhost:8000/bracket/" + competitorType + "/auto?from=" + spotifyID + "&size=" + size + "&seeded=" + seeded);
     xhttp.onload = function () {
         if (xhttp.status >= 200 && xhttp.status < 400) {
             let data = JSON.parse(xhttp.responseText);
