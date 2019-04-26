@@ -1,0 +1,8 @@
+2019-04-21 12:48:55,777 [Thread-2] INFO  spotify-madness.nrepl - nREPL server stopped 
+2019-04-21 12:48:55,781 [Thread-2] DEBUG org.projectodd.wunderboss.WunderBoss - Returning existing component for org.projectodd.wunderboss.web.Web:592813810, ignoring options. 
+2019-04-21 12:48:55,783 [Thread-2] DEBUG io.undertow - stopping undertow server io.undertow.Undertow@3ad98a3 
+2019-04-21 12:48:55,788 [Thread-2] INFO  luminus.http-server - HTTP server stopped 
+2019-04-21 12:48:55,793 [Thread-2] INFO  spotify-madness.env - 
+-=[spotify-madness has shut down successfully]=- 
+2019-04-21 12:48:55,795 [Thread-2] INFO  spotify-madness.core - #'spotify-madness.core/repl-server stopped 
+2019-04-21 12:48:55,795 [Thread-2] INFO  spotify-madness.core - #'spotify-madness.core/http-server stopped 

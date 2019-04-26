@@ -99,7 +99,7 @@ function updateBracketData(winnerElement) {
 function getBracketData() {
     let xhttp = new XMLHttpRequest();
 
-    xhttp.open("GET", "http://https://7ac7acc6.ngrok.io/bracket/" + competitorType + "/auto?from=" + spotifyID + "&size=" + size + "&seeded=" + seeded)
+    xhttp.open("GET", "http://174.16.217.76:3000/bracket/" + competitorType + "/auto?from=" + spotifyID + "&size=" + size + "&seeded=" + seeded)
     xhttp.onload = function () {
         if (xhttp.status >= 200 && xhttp.status < 400) {
             let data = JSON.parse(xhttp.responseText);
