@@ -11,7 +11,7 @@ uriInput.addEventListener("input", updateSpotifyID);
 uriInput.addEventListener("propertychange", updateSpotifyID);
 
 let sizeInput = document.getElementById("size");
-for (let i = 1; i <= 8; i++) {
+for (let i = 1; i <= 10; i++) {
     let node = document.createElement("option");
     let text = document.createTextNode(Math.pow(2, i).toString());
     node.setAttribute("size", Math.pow(2, i).toString());
