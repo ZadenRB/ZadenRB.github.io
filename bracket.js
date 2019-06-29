@@ -1,5 +1,5 @@
 let competitorType = null;
-let size = 2;
+let size = "auto";
 let seeded = true;
 let spotifyID = null;
 let rounds = [];
@@ -109,7 +109,7 @@ function updateBracketData(winnerElement) {
 function getBracketData() {
     let xhttp = new XMLHttpRequest();
 
-    xhttp.open("GET", "http://localhost:8000/bracket/" + competitorType + "/auto?from=" + spotifyID + "&size=" + size + "&seeded=" + seeded);
+    xhttp.open("GET", "http://localhost:8000/bracket/" + competitorType + "?from=" + spotifyID + "&size=" + size + "&seeded=" + seeded);
     xhttp.onload = function () {
         if (xhttp.status >= 200 && xhttp.status < 400) {
             let data = JSON.parse(xhttp.responseText);
