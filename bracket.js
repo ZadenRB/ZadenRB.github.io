@@ -2,9 +2,10 @@ let competitorType = null;
 let size = "auto";
 let seeded = true;
 let spotifyID = null;
-let rounds = [];
-let matchups = [];
-let bracket = document.getElementById("tournament");
+let tournamentData = {
+    "teams": [],
+    "results": [],
+};
 
 let uriInput = document.getElementById("spotifyURI");
 uriInput.addEventListener("input", updateSpotifyID);
@@ -62,50 +63,6 @@ function updateSpotifyID() {
     }
 }
 
-function updateBracketData(winnerElement) {
-    let gameID = winnerElement.className.split("-")[2];
-    let nextGameID = Math.floor(gameID / 2);
-    let top = gameID % 2 === 0;
-    let roundNode = winnerElement.parentNode;
-    let otherCompetitor = roundNode.getElementsByClassName(winnerElement.className.replace(top ? "game-top" : "game-bottom", top ? "game-bottom" : "game-top"))[0];
-    if (otherCompetitor.innerHTML !== '&nbsp;') {
-        let nextRound = parseInt(winnerElement.parentNode.id.split("-")[1]) + 1;
-        let nextRoundID = "round-" + nextRound;
-        let nextRoundElement = document.getElementById(nextRoundID);
-        let nextCompetitorElement;
-        if (nextRound === Math.log2(matchups.length) + 2) {
-            nextCompetitorElement = nextRoundElement.getElementsByClassName("game-top game-0")[0];
-        } else {
-            if (top) {
-                nextCompetitorElement = nextRoundElement.getElementsByClassName("game-top game-" + nextGameID)[0];
-            } else {
-                nextCompetitorElement = nextRoundElement.getElementsByClassName("game-bottom game-" + nextGameID)[0];
-            }
-        }
-        nextCompetitorElement.textContent = winnerElement.textContent;
-        //Clear future rounds
-        for (let i = nextRound; i < rounds.length - 1; i++) {
-            gameID = nextGameID;
-            top = gameID % 2 === 0;
-            nextRound = nextRound + 1;
-            nextRoundID = "round-" + nextRound;
-            nextRoundElement = document.getElementById(nextRoundID);
-            if (nextRound === Math.log2(matchups.length) + 2) {
-                nextCompetitorElement = nextRoundElement.getElementsByClassName("game-top game-0")[0];
-            } else {
-                if (top) {
-                    nextCompetitorElement = nextRoundElement.getElementsByClassName("game-top game-" + nextGameID)[0];
-                } else {
-                    nextCompetitorElement = nextRoundElement.getElementsByClassName("game-bottom game-" + nextGameID)[0];
-                }
-            }
-            if (nextCompetitorElement != null && nextCompetitorElement.firstChild != null) {
-                nextCompetitorElement.firstChild.parentElement.innerHTML = '&nbsp;';
-            }
-        }
-    }
-}
-
 function getBracketData() {
     let xhttp = new XMLHttpRequest();
 
@@ -113,92 +70,21 @@ function getBracketData() {
     xhttp.onload = function () {
         if (xhttp.status >= 200 && xhttp.status < 400) {
             let data = JSON.parse(xhttp.responseText);
-            matchups = [];
-            rounds = [];
-            for (let i = 0; i < Math.ceil(Math.log2(data.length) + 2); i++) {
-                rounds.push([]);
-                for (let j = 0; j < Math.floor(data.length / Math.pow(2, i)); j++) {
-                    rounds[i].push([]);
-                }
-            }
             for (let i = 0; i < data.length; i++) {
-                matchups.push([data[i].TopCompetitor, data[i].BottomCompetitor]);
+                tournamentData["teams"].push([data[i].TopCompetitor.Title, data[i].BottomCompetitor.Title]);
             }
-            rounds[0] = matchups;
-            while (bracket.firstChild) {
-                bracket.removeChild(bracket.firstChild);
-            }
-            for (let round of rounds) {
-                let roundNode = document.createElement("ul");
-                roundNode.className = "round";
-                roundNode.id = "round-" + rounds.indexOf(round);
-                for (let i = 0; i < round.length; i++) {
-                    let gameSpacerNode = document.createElement("li");
-                    gameSpacerNode.innerHTML = '&nbsp;';
-                    gameSpacerNode.className = "game game-spacer";
-
-                    let spacerNode = document.createElement("li");
-                    spacerNode.innerHTML = '&nbsp;';
-                    spacerNode.className = "spacer";
-
-                    roundNode.appendChild(spacerNode);
-                    let topCompetitorNode = document.createElement("li");
-                    let topCompetitorTextNode;
-                    if (round[i][0] != null) {
-                        topCompetitorTextNode = document.createTextNode(round[i][0].Title);
-                    } else {
-                        topCompetitorTextNode = document.createTextNode("");
-                        topCompetitorNode.innerHTML = '&nbsp;';
-                    }
-                    topCompetitorNode.className = "game game-top game-" + i;
-                    topCompetitorNode.appendChild(topCompetitorTextNode);
-                    roundNode.appendChild(topCompetitorNode);
-                    if (!(topCompetitorNode.textContent === "Bye")) {
-                        topCompetitorNode.setAttribute("onclick", "updateBracketData(this)");
-                    }
-
-                    roundNode.appendChild(gameSpacerNode);
-
-                    let bottomCompetitorNode = document.createElement("li");
-                    let bottomCompetitorTextNode;
-                    if (round[i][1] != null) {
-                        bottomCompetitorTextNode = document.createTextNode(round[i][1].Title);
-                    } else {
-                        bottomCompetitorTextNode = document.createTextNode("");
-                        bottomCompetitorNode.innerHTML = '&nbsp;';
-                    }
-                    bottomCompetitorNode.className = "game game-bottom game-" + i;
-                    bottomCompetitorNode.appendChild(bottomCompetitorTextNode);
-                    roundNode.appendChild(bottomCompetitorNode);
-                    if (!(bottomCompetitorNode.textContent === "Bye")) {
-                        bottomCompetitorNode.setAttribute("onclick", "updateBracketData(this)");
-                    }
-                }
-                if (round.length === 0) {
-                    let topCompetitorNode = document.createElement("li");
-                    topCompetitorNode.className = "game game-top game-0";
-                    roundNode.appendChild(topCompetitorNode);
-                } else {
-                    let spacerNode = document.createElement("li");
-                    spacerNode.innerHTML = '&nbsp;';
-                    spacerNode.className = "spacer";
-                    roundNode.appendChild(spacerNode);
-                }
-                bracket.appendChild(roundNode);
-            }
-            for (let i = 0; i < rounds[0].length; i++) {
-                let firstRound = document.getElementById("round-0");
-                let winner;
-                if (rounds[0][i][0].Title === "Bye") {
-                    winner = firstRound.getElementsByClassName("game-bottom game-" + i)[0];
-                }
-                if (rounds[0][i][1].Title === "Bye") {
-                    winner = firstRound.getElementsByClassName("game-top game-" + i)[0];
-                }
-                if (winner != null) {
-                    updateBracketData(winner);
-                }
-            }
+            $(function () {
+                $('#tournament').bracket({
+                    init: tournamentData,
+                    save: function () {
+                    },
+                    centerConnectors: true,
+                    disableScoring: true,
+                    disableToolbar: true,
+                    disableTeamEdit: true,
+                    skipConsolationRound: true,
+                });
+            });
         } else {
             console.log(xhttp.responseText)
         }

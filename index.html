@@ -1,7 +1,8 @@
 <html>
 <head>
-    <link rel="stylesheet" href="style.css">
     <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="jquery.bracket.css"/>
+    <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 <select id="size" onchange="updateSize(this.value)"></select>
@@ -13,6 +14,11 @@
 <button id="getBracket" onclick="getBracketData()" disabled>Create Bracket</button>
 <main id="tournament">
 </main>
+<script
+        src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous"></script>
+<script type="text/javascript" src="jquery.bracket.js"></script>
 <script src="bracket.js"></script>
 </body>
 </html>
