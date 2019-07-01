@@ -66,7 +66,7 @@ function updateSpotifyID() {
 function getBracketData() {
     let xhttp = new XMLHttpRequest();
 
-    xhttp.open("GET", "http://localhost:8000/bracket/" + competitorType + "?from=" + spotifyID + "&size=" + size + "&seeded=" + seeded);
+    xhttp.open("GET", "https://spotify-madness-api.herokuapp.com/bracket/" + competitorType + "?from=" + spotifyID + "&size=" + size + "&seeded=" + seeded);
     xhttp.onload = function () {
         if (xhttp.status >= 200 && xhttp.status < 400) {
             let data = JSON.parse(xhttp.responseText);
