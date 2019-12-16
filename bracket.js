@@ -70,6 +70,7 @@ function getBracketData() {
     xhttp.onload = function () {
         if (xhttp.status >= 200 && xhttp.status < 400) {
             let data = JSON.parse(xhttp.responseText);
+            tournamentData["teams"] = [];
             for (let i = 0; i < data.length; i++) {
                 tournamentData["teams"].push([data[i].TopCompetitor.Title, data[i].BottomCompetitor.Title]);
             }
