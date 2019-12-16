@@ -44,7 +44,7 @@ function updateSpotifyID() {
         validURI = true;
         competitorType = "album";
     }
-    if (/spotify:user:\w+:playlist:\w+/.test(URI) || /https?:\/\/open.spotify.com\/user\/\w+\/playlist\/\w+/.test(URI)) {
+    if (/spotify:playlist:\w+/.test(URI) || /https?:\/\/open.spotify.com\/playlist\/\w+/.test(URI)) {
         validURI = true;
         competitorType = "track";
     }
@@ -86,11 +86,11 @@ function getBracketData() {
                 });
             });
         } else {
-            console.log(xhttp.responseText)
+            console.log(xhttp.responseText);
         }
     };
     xhttp.onerror = function () {
-        console.log("Failed to get bracket")
+        console.log(xhttp.responseText);
     };
     xhttp.send();
 }
