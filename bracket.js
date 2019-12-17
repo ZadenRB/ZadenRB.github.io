@@ -83,6 +83,7 @@ function getBracketData() {
                     disableScoring: true,
                     disableToolbar: true,
                     disableTeamEdit: true,
+                    autoSizeTeamWidth: true,
                     skipConsolationRound: true,
                 });
             });
